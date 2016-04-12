@@ -31,3 +31,19 @@ node_modules
 
 # Optional REPL history
 .node_repl_history
+
+
+# Django Ignores
+*.egg-info
+*.pot
+*.py[co]
+__pycache__
+MANIFEST
+dist/
+docs/_build/
+docs/locale/
+node_modules/
+tests/coverage_html/
+tests/.coverage
+build/
+tests/report/
