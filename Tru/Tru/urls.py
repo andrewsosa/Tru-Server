@@ -18,25 +18,13 @@ from django.conf.urls import url, include
 #from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
 from snippets import views as snippets_views
-
-
-"""
-# Serializers define the API representation.
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ('url', 'username', 'email', 'is_staff')
-
-# ViewSets define the view behavior.
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-"""
+from API import views as API_views
 
 # Routers provide an easy way of automatically determining the URL conf.
 api_router = routers.DefaultRouter()
 api_router.register(r'snippets', snippets_views.SnippetViewSet)
 api_router.register(r'users', snippets_views.UserViewSet)
+
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
