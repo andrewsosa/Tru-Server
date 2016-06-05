@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 from API.serializers import UserSerializer, FeedSerializer, AccountSerializer
-from API.permissions import DefaultAccountPermission, DefaultFeedPermission
+from API.permissions import AccountPermission, FeedPermission, UserPermission
 from API.models import Feed, Account
 
 # Class-based views.
@@ -23,9 +23,11 @@ class UserViewSet(viewsets.ModelViewSet):
     API endpoint for data on users.
     """
     serializer_class = UserSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [UserPermission]
 
     def get_queryset(self):
+        #return User.objects.all()
+
         if self.request.user.is_superuser:
             return User.objects.all()
         else:
@@ -45,7 +47,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     API endpoint for user account data.
     """
     serializer_class = AccountSerializer
-    permission_classes = [DefaultAccountPermission]
+    permission_classes = [AccountPermission]
 
     def get_queryset(self):
         if self.request.user.is_superuser:
@@ -61,7 +63,7 @@ class FeedViewSet(viewsets.ModelViewSet):
     API endpoint for Feed content.
     """
     serializer_class = FeedSerializer
-    permission_classes = [DefaultFeedPermission]
+    permission_classes = [FeedPermission]
 
     def get_queryset(self):
         # Allow admins to view all of the posts.

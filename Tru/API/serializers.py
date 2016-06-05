@@ -6,10 +6,11 @@ from API.models import Feed, Account
 
 
 class AccountSerializer(serializers.ModelSerializer):
-    feeds = serializers.StringRelatedField(
+    feeds = serializers.HyperlinkedRelatedField(
         many=True,
         #queryset=Feed.objects.all()
         read_only=True,
+        view_name='Feed-detail',
     )
 
     user = serializers.HyperlinkedRelatedField(

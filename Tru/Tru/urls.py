@@ -18,7 +18,6 @@ from django.conf.urls import url, include
 from rest_framework import routers, serializers, viewsets
 from snippets import views as snippets_views
 from API import views as API_views
-from CodeCamp import views as CodeCamp_views
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -30,7 +29,6 @@ api_router.register(r'snippets', snippets_views.SnippetViewSet)
 api_router.register(r'users', API_views.UserViewSet, 'User')
 api_router.register(r'feed', API_views.FeedViewSet, 'Feed')
 api_router.register(r'accounts', API_views.AccountViewSet, 'Account')
-api_router.register(r'schools', CodeCamp_views.SchoolViewSet)
 #api_router.register(r'create_auth', API_views.create_auth)
 
 """

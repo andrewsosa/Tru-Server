@@ -59,3 +59,6 @@ class Feed(models.Model):
 
     class Meta:
         ordering = ('created',)
+
+    def __unicode__(self):
+        return '%s' % (self.content)
