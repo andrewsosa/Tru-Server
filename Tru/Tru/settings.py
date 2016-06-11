@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'Tru.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'tru.db',                                   # Or path to database file if using sqlite3.
+        'NAME': os.environ['DB_NAME'],                      # Or path to database file if using sqlite3.
 
         # The following settings are not used with sqlite3:
-        'USER': 'tru-db-user',
-        'PASSWORD': 'forkingmaster',
+        'USER': os.environ['DB_USER'],
+        'PASSWORD': os.environ['DB_PSWD'],
         'HOST': 'localhost',
         'PORT': '',
     }
