@@ -6,21 +6,40 @@ from API.models import Feed, Account
 
 
 class AccountSerializer(serializers.ModelSerializer):
-    feeds = serializers.HyperlinkedRelatedField(
+    posts = serializers.HyperlinkedRelatedField(
         many=True,
         #queryset=Feed.objects.all()
         read_only=True,
         view_name='Feed-detail',
     )
 
-    user = serializers.HyperlinkedRelatedField(
-        read_only=True,
-        view_name='User-detail',
+    user = serializers.StringRelatedField()
+
+    friends = serializers.HyperlinkedRelatedField(
+        many = True,
+        queryset = Account.objects.all(),
+        view_name = 'Account-detail',
     )
+
+    friend_names = serializers.SerializerMethodField()
+
+    inbox = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='Feed-detail',
+    )
+
+    # user = serializers.HyperlinkedRelatedField(
+    #     read_only=True,
+    #     view_name='User-detail',
+    # )
 
     class Meta:
         model = Account
-        fields = ('user', 'feeds')
+        fields = ('user', 'friends', 'friend_names', 'posts', 'inbox')
+
+    def get_friend_names(self, obj):
+        return [str(x) for x in obj.friends.all()]
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -72,6 +91,18 @@ class FeedSerializer(serializers.ModelSerializer):
         view_name = 'Account-detail',
     )
 
+    author_name = serializers.SerializerMethodField()
+
+    recipients = serializers.HyperlinkedRelatedField(
+        write_only = True,
+        queryset   = Account.objects.all(), # TODO queryset should only be friends
+        view_name  = 'Account-detail',
+        many       = True,
+    )
+
     class Meta:
         model = Feed
-        fields = ('id', 'created', 'author', 'content', 'color')
+        fields = ('id', 'created', 'author', 'author_name', 'content', 'color', 'recipients')
+
+    def get_author_name(self, obj):
+        return str(obj.author)

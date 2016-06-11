@@ -50,13 +50,17 @@ class AccountViewSet(viewsets.ModelViewSet):
     permission_classes = [AccountPermission]
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            return Account.objects.all()
-        else:
-            return Account.objects.filter(user=self.request.user.id)
+        try:
+            if self.request.user.is_superuser:
+                return Account.objects.all()
+            else:
+                    return Account.objects.filter(user=self.request.user.id)
+        except Account.DoesNotExist:
+            return None
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        if len(Account.objects.filter(user=self.request.user.id)) == 0:
+            serializer.save(user=self.request.user)
 
 class FeedViewSet(viewsets.ModelViewSet):
     """
@@ -66,6 +70,10 @@ class FeedViewSet(viewsets.ModelViewSet):
     permission_classes = [FeedPermission]
 
     def get_queryset(self):
+
+        # temp
+        return Feed.objects.all()
+
         # Allow admins to view all of the posts.
         if self.request.user.is_staff:
             return Feed.objects.all()

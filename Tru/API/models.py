@@ -8,6 +8,7 @@ from annoying.fields import AutoOneToOneField
 
 # Model constants
 CONTENT_LENGTH = 140
+USERNAME_LENGTH = 16
 COLOR_DEFAULT = '#FFE0B2'
 COLOR_MAX_LENGTH = 10
 
@@ -25,7 +26,7 @@ class Account(models.Model):
     user = models.OneToOneField(
         'auth.User',
         primary_key=True,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
 
     # This is a non-reflexive relationship, i.e.
@@ -53,9 +54,18 @@ class Feed(models.Model):
     a 'post'.
     """
     created = models.DateTimeField(auto_now_add=True)
-    author  = models.ForeignKey('Account', related_name='feeds')
+    author  = models.ForeignKey('Account', related_name='posts')
     content = models.CharField(max_length=CONTENT_LENGTH)
     color   = models.CharField(default=COLOR_DEFAULT, max_length=COLOR_MAX_LENGTH)
+
+    #recipients = models.ForeignKey('Account', related_name='inbox', null=True)
+    recipients = models.ManyToManyField(
+        'Account',
+        related_name="inbox",
+        blank=True,
+        symmetrical=True,
+    )
+
 
     class Meta:
         ordering = ('created',)
